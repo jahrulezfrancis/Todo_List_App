@@ -1,31 +1,47 @@
 import 'package:flutter/material.dart';
 
-void main() =>
-    runApp(const MaterialApp(home: Scaffold(body: Center(child: Counter()))));
+void main() => runApp(const App());
 
-class Counter extends StatefulWidget {
-  const Counter({super.key});
-  @override
-  State<Counter> createState() => _CounterState();
-}
-
-class _CounterState extends State<Counter> {
-  int _intialCount = 0;
-  void _increment() {
-    setState(() {
-      _intialCount++;
-    });
-  }
-
+class App extends StatelessWidget {
+  const App({super.key});
   @override
   Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: [
-        TextButton(onPressed: _increment, child: const Text('Add Count')),
-        Text('You pressed the button $_intialCount times.')
-      ],
+    return const MaterialApp(
+      home: HomePage(),
+    );
+  }
+}
+
+class HomePage extends StatefulWidget {
+  const HomePage({super.key});
+  @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  String _inputText = '';
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: const Text('Powerful To do List App')),
+      body: Center(
+          child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 12),
+              child: TextField(
+                decoration: const InputDecoration(
+                    border: OutlineInputBorder(),
+                    hintText: 'Enter Catch Phrase'),
+                onChanged: (value) {
+                  setState(() {
+                    _inputText = value;
+                  });
+                },
+              ))),
+      bottomSheet: Container(
+        alignment: Alignment.center,
+        height: 50,
+        child: Text('You just entered $_inputText as your catch phrase.'),
+      ),
     );
   }
 }
