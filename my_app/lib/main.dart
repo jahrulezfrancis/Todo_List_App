@@ -1,28 +1,31 @@
-// import 'dart:developer';
-
 import 'package:flutter/material.dart';
 
-void main() {
-  runApp(MaterialApp(
-      home: Scaffold(
-    appBar: AppBar(title: const Text('Smart To To do list')),
-    body: const HomeWidget(),
-  )));
+void main() =>
+    runApp(const MaterialApp(home: Scaffold(body: Center(child: Counter()))));
+
+class Counter extends StatefulWidget {
+  const Counter({super.key});
+  @override
+  State<Counter> createState() => _CounterState();
 }
 
-class HomeWidget extends StatelessWidget {
-  const HomeWidget({super.key});
+class _CounterState extends State<Counter> {
+  int _intialCount = 0;
+  void _increment() {
+    setState(() {
+      _intialCount++;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: [
-          Container(width: 100, height: 100, color: Colors.amberAccent),
-          Container(width: 100, height: 100, color: Colors.blueGrey),
-          Container(width: 100, height: 100, color: Colors.brown.shade700),
-        ],
-      ),
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        TextButton(onPressed: _increment, child: const Text('Add Count')),
+        Text('You pressed the button $_intialCount times.')
+      ],
     );
   }
 }
