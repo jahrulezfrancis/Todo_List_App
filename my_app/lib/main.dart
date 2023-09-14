@@ -1,88 +1,77 @@
 import 'package:flutter/material.dart';
 
-void main() => runApp(const MaterialApp(home: HomePage()));
+void main() => runApp(const MaterialApp(
+      title: 'Navition',
+      home: FirstScreen(),
+    ));
 
-class HomePage extends StatefulWidget {
-  const HomePage({super.key});
-  @override
-  _HomePageState createState() => _HomePageState();
-}
-
-class _HomePageState extends State<HomePage> {
-  final List<String> _todos = [];
-
-  void _addTodo() {
-    showDialog(
-        context: context,
-        builder: ((BuildContext context) {
-          String newTodo = '';
-          return AlertDialog(
-            title: const Text('Create new task'),
-            content: TextField(
-                onChanged: (value) => {
-                      newTodo = value,
-                    }),
-            actions: <Widget>[
-              TextButton(
-                  onPressed: () => {Navigator.of(context).pop()},
-                  child: const Text('Cancel')),
-              TextButton(
-                onPressed: () {
-                  setState(
-                    () {
-                      _todos.add(newTodo);
-                    },
-                  );
-                  Navigator.of(context).pop();
-                },
-                child: const Text('Create'),
-              ),
-            ],
-          );
-        }));
-  }
-
+class FirstScreen extends StatelessWidget {
+  const FirstScreen({super.key});
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Todo App'),
+        title: const Text('First Screen'),
       ),
-      body: ListView.builder(
-        itemCount: _todos.length,
-        itemBuilder: (context, index) {
-          final todo = _todos[index];
-          return ListTile(
-              mouseCursor: SystemMouseCursors.click,
-              title: GestureDetector(
-                child: Text(
-                  todo,
-                  style: TextStyle(
-                      decoration: todo.startsWith('-')
-                          ? TextDecoration.lineThrough
-                          : TextDecoration.none),
-                ),
-                onTap: () {
-                  setState(() {
-                    if (todo.startsWith('-')) {
-                      _todos[index] = todo.substring(2);
-                    } else {
-                      _todos[index] = '- $todo';
-                    }
-                  });
+      body: Center(
+        child: ElevatedButton(
+          onPressed: () {
+            Navigator.push(context,
+                MaterialPageRoute(builder: (context) => const SecondScreen()));
+          },
+          child: const Text('Next Page'),
+        ),
+      ),
+    );
+  }
+}
+
+class SecondScreen extends StatelessWidget {
+  const SecondScreen({super.key});
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Second screen'),
+      ),
+      body: Center(
+        child: Column(mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            ElevatedButton(
+                onPressed: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const ThirdScreen()));
                 },
-                onDoubleTap: () {
-                  setState(() {
-                    _todos.removeAt(index);
-                  });
+                child: const Text('Next Page')),
+            ElevatedButton(
+                onPressed: () {
+                  Navigator.pop(context);
                 },
-              ));
+                child: const Text('Previous'))
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class ThirdScreen extends StatelessWidget {
+  const ThirdScreen({super.key});
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Third Screen'),
+      ),
+      body: Center(
+          child: ElevatedButton(
+        onPressed: () {
+          Navigator.pop(context);
         },
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _addTodo,
-        child: const Icon(Icons.add),
-      ),
+        child: const Text('Go back'),
+      )),
     );
   }
 }
