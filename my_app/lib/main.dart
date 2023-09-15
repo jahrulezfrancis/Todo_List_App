@@ -1,77 +1,69 @@
 import 'package:flutter/material.dart';
 
-void main() => runApp(const MaterialApp(
-      title: 'Navition',
-      home: FirstScreen(),
+class Todo {
+  final String title;
+  final String description;
+
+  const Todo(this.title, this.description);
+}
+
+List<Todo> taskList = [
+  const Todo('Clean the house',
+      'Clean tho whole house and remove all curb webs from the ceiling'),
+  const Todo('Improve printing function',
+      'Work on the palading store printing function and make the elements dynamic'),
+  const Todo('Get some rest',
+      'Drink plenty of water and sleep the hell out of your life!')
+];
+
+void main() => runApp(MaterialApp(
+      title: 'App',
+      home: TodoScreen(todos: taskList),
     ));
 
-class FirstScreen extends StatelessWidget {
-  const FirstScreen({super.key});
+class TodoScreen extends StatelessWidget {
+  const TodoScreen({Key? key, required this.todos}) : super(key: key);
+
+  final List<Todo> todos;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('First Screen'),
+        title: const Text('Home'),
       ),
-      body: Center(
-        child: ElevatedButton(
-          onPressed: () {
-            Navigator.push(context,
-                MaterialPageRoute(builder: (context) => const SecondScreen()));
-          },
-          child: const Text('Next Page'),
-        ),
-      ),
+      body: ListView.builder(
+          itemCount: todos.length,
+          itemBuilder: (context, index) {
+            return ListTile(
+              title: Text(todos[index].title),
+              onTap: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) =>
+                            TodoDetailScreen(todo: todos[index])));
+              },
+            );
+          }),
     );
   }
 }
 
-class SecondScreen extends StatelessWidget {
-  const SecondScreen({super.key});
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Second screen'),
-      ),
-      body: Center(
-        child: Column(mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: [
-            ElevatedButton(
-                onPressed: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => const ThirdScreen()));
-                },
-                child: const Text('Next Page')),
-            ElevatedButton(
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-                child: const Text('Previous'))
-          ],
-        ),
-      ),
-    );
-  }
-}
+class TodoDetailScreen extends StatelessWidget {
+  const TodoDetailScreen({Key? key, required this.todo}) : super(key: key);
 
-class ThirdScreen extends StatelessWidget {
-  const ThirdScreen({super.key});
+  final Todo todo;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Third Screen'),
+        title: Text(todo.title),
       ),
       body: Center(
-          child: ElevatedButton(
-        onPressed: () {
-          Navigator.pop(context);
-        },
-        child: const Text('Go back'),
-      )),
+        child: Text(todo.description),
+      ),
     );
   }
 }
