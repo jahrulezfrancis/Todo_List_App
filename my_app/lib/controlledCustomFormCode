@@ -1,0 +1,109 @@
+import 'package:flutter/material.dart';
+
+void main() => runApp(const App());
+
+class App extends StatelessWidget {
+  const App({Key? key}) : super(key: key);
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Custom form demo',
+      home: const CustomForm(),
+      theme: ThemeData(primarySwatch: Colors.amber),
+    );
+  }
+}
+
+class CustomForm extends StatefulWidget {
+  const CustomForm({super.key});
+  @override
+  State<CustomForm> createState() => _CustomFormState();
+}
+
+class _CustomFormState extends State<CustomForm> {
+  final _formKey = GlobalKey<FormState>();
+  final nameController = TextEditingController();
+  final emailController = TextEditingController();
+  final String emailInstance = "@ .com";
+
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   formController.addListener(_printValue);
+  // }
+
+  @override
+  void dispose() {
+    nameController.dispose();
+    emailController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+        appBar: AppBar(
+          title: const Text('Custom form demo'),
+        ),
+        body: Form(
+            key: _formKey,
+            child: Padding(
+              padding: const EdgeInsets.all(15),
+              child: Column(children: [
+                const SizedBox(
+                  height: 15,
+                ),
+                TextFormField(
+                  validator: (value) => value == null || value.isEmpty
+                      ? 'Please enter your username'
+                      : null,
+                  controller: nameController,
+                  autofocus: true,
+                  decoration: InputDecoration(
+                      labelText: 'Full name',
+                      border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10))),
+                ),
+                const SizedBox(
+                  height: 15,
+                ),
+                TextFormField(
+                  validator: (value) {
+                    if (!RegExp(r'\S+@\S+\.\S+').hasMatch(value!)) {
+                      return 'Invalid email adress';
+                    } else if (value.isEmpty) {
+                      return 'Email address is required';
+                    }
+
+                    return null;
+                  },
+                  controller: emailController,
+                  decoration: InputDecoration(
+                      labelText: 'Email adress',
+                      border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10))),
+                ),
+                const SizedBox(
+                  height: 15,
+                ),
+                ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      shape: const RoundedRectangleBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(8))),
+                      padding: const EdgeInsets.all(18),
+                    ),
+                    onPressed: () {
+                      if (_formKey.currentState!.validate()) {
+                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                            backgroundColor: Colors.green[500],
+                            duration: const Duration(seconds: 5),
+                            showCloseIcon: true,
+                            content: Text(
+                                'Your Form has been submited successfully and your submited data is: Fullname: ${nameController.text} and email: ${emailController.text}')));
+                      }
+                    },
+                    child: const Text('Submit'))
+              ]),
+            )));
+  }
+}

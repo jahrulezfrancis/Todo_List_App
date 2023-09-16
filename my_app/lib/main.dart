@@ -19,7 +19,7 @@ class TodoScreen extends StatefulWidget {
   final List<Todo> todos;
 
   @override
-  _TodoScreenState createState() => _TodoScreenState();
+  State<TodoScreen> createState() => _TodoScreenState();
 }
 
 class _TodoScreenState extends State<TodoScreen> {
@@ -124,3 +124,4 @@ class DetailScreen extends StatelessWidget {
     );
   }
 }
+
